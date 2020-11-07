@@ -5,31 +5,34 @@ import "./FontAwesomeIcons";
 import uuid from 'uuid/dist/v4';
 import TodoInput from './todoInput';
 import Todo from './todo';
+import Counter from './counter';
 import './App.css';
 
 
 class App extends Component {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state = {
      edit: false,
      input:'',
+     duration:'',
      id: uuid()
     }
   }
 
   handleChange = (event) => {
     this.setState({
-      input: event.target.value
+      [event.target.name]: event.target.value
     })
     };
   
     handleClick = (event) => {
       event.preventDefault();
-      const newTodo = {id: this.state.id, todo: this.state.input};
+      const newTodo = {id: this.state.id, todo: this.state.input, duration: this.state.duration};
       this.props.newHandleClick(newTodo);
       this.setState({
         input: '',
+        duration: '',
         edit: false,
         id: uuid()
       })
@@ -47,7 +50,7 @@ class App extends Component {
   }
 
   render() {
-    const ListTodo = this.props.todos.map(todo => <li key={todo.id}><Todo todo={todo.todo} id={todo.id} handleEdit={this.handleEdit} /></li>)
+    const ListTodo = this.props.todos.map(todo => <li key={todo.id}><Todo  duration={todo.duration} todo={todo.todo} id={todo.id} handleEdit={this.handleEdit} /></li>)
     return (
       <div className="App">
         <div className="container bg-primary">
@@ -58,6 +61,7 @@ class App extends Component {
         <div className="container">
             <TodoInput  
               input={this.state.input} 
+              duration={this.state.duration}
               edit={this.state.edit}
               handleChange={this.handleChange}
               handleClick={this.handleClick}
@@ -66,7 +70,10 @@ class App extends Component {
         <div>
           {this.props.todos.length === 0 ? 
           <div className="alert alert-info text-center font-italic container" style={{fontSize: "20px"}} role="alert">There is no Tasks</div> :
-          <ul>{ListTodo}</ul> }
+          <div>
+            <div><Counter hour={Number(this.props.todos[0].duration.slice(0,2))} minute={Number(this.props.todos[0].duration.slice(3))}  firstId={this.props.todos[0].id} /></div>
+            <ul>{ListTodo}</ul>
+            </div> }
         </div>
       </div>
     );
@@ -79,7 +86,7 @@ const mapStateToProps = state => {
   }
 };
 
-const mapDispatchToProps = dispatch=> {
+const mapDispatchToProps = dispatch => {
   return {
     newHandleClick: (newTodo) => {
       dispatch(addTodo(newTodo))

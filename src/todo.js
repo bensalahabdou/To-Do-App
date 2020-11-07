@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
 const Todo = props => {
-    const { todo, id, handleEdit } = props;
+    const { todo, id, handleEdit, duration } = props;
     return (
        <div className="container">
             <div className="alert alert-dark d-flex justify-content-between" style={{textTransform:"uppercase", width:"90%"}} role="alert">
@@ -13,17 +13,18 @@ const Todo = props => {
                     className="d-flex align-items-center"
                     >{todo}
                 </div>
+                <div><strong style={{textTransform:"capitalize"}}>task's time:</strong><span className="badge badge-pill badge-light">{duration}</span></div>
                 <div>
-                    <button 
+                    <span 
                         onClick= {() => {handleEdit(id)}} 
-                        className= "btn btn-info"
-                        style={{width: "70px", height: "50px"}}  
-                    ><FontAwesomeIcon icon="edit" /></button>
-                    <button 
+                        className= " border-0 mr-4"
+                        style={{width: "70px", height: "50px", cursor:"pointer"}}  
+                    ><FontAwesomeIcon icon="edit" size="1x" color="green"/></span>
+                    <span 
                         onClick= {() => {props.removeNewTodo(id)}} 
-                        className= "btn btn-danger"
-                        style={{width: "70px", height: "50px"}}  
-                    ><FontAwesomeIcon icon="trash" /></button>
+                        className= "color-danger"
+                        style={{width: "70px", height: "50px", cursor:"pointer"}}  
+                    ><FontAwesomeIcon icon="trash" size="1x" color="red" /></span>
                     
                 </div>
             </div>
